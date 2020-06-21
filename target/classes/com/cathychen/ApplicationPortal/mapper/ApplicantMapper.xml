@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.cathychen.ApplicationPortal.dao.ApplicantDao">
+    <resultMap id="BaseResultMap" type="com.cathychen.ApplicationPortal.domain.Applicant">
+        <id column="Applicant_ID" property="ApplicantId" jdbcType="INTEGER" />
+        <result column="Applicant_NAME" property="ApplicantName" jdbcType="CHAR" />
+        <result column="Applicant_PASSWORD" property="ApplicantPassword" jdbcType="CHAR" />
+        <result column="Applicant_EMAIL" property="ApplicantEmail" jdbcType="CHAR" />
+    </resultMap>
+
+    <resultMap id="EmailResultMap" type="com.cathychen.ApplicationPortal.domain.Applicant">
+        <id column="Applicant_EMAIL" property="ApplicantEmail" jdbcType="CHAR" />
+        <result column="Applicant_ID" property="ApplicantId" jdbcType="INTEGER" />
+        <result column="Applicant_NAME" property="ApplicantName" jdbcType="CHAR" />
+        <result column="Applicant_PASSWORD" property="ApplicantPassword" jdbcType="CHAR" />
+    </resultMap>
+
+    <select id="selectApplicantById" parameterType="int" resultMap="BaseResultMap">
+        SELECT * FROM t_Applicant WHERE Applicant_ID = #{ApplicantId}
+    </select>
+
+    <select id="selectApplicantByEmail" parameterType="String" resultMap="EmailResultMap">
+        SELECT * FROM t_Applicant WHERE Applicant_EMAIL = #{ApplicantEmail}
+    </select>
+
+    <insert id = "insertApplicant" useGeneratedKeys="true" keyColumn="Applicant_ID" keyProperty="ApplicantId"
+            parameterType = "com.cathychen.ApplicationPortal.domain.Applicant">
+        INSERT INTO t_Applicant (
+        Applicant_NAME,
+        Applicant_PASSWORD,
+        Applicant_EMAIL
+        )
+        VALUES
+        (
+        #{ApplicantName},
+        #{ApplicantPassword},
+        #{ApplicantEmail}
+        );
+    </insert>
+
+</mapper> 

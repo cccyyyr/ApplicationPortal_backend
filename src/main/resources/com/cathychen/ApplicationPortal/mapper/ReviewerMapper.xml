@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.cathychen.ApplicationPortal.dao.ReviewerDao">
+    <resultMap id="BaseResultMap" type="com.cathychen.ApplicationPortal.domain.Reviewer">
+        <id column="Reviewer_ID" property="ReviewerId" jdbcType="INTEGER" />
+        <result column="Reviewer_NAME" property="ReviewerName" jdbcType="CHAR" />
+        <result column="Reviewer_PASSWORD" property="ReviewerPassword" jdbcType="CHAR" />
+        <result column="Reviewer_EMAIL" property="ReviewerEmail" jdbcType="CHAR" />
+    </resultMap>
+
+    <resultMap id="EmailResultMap" type="com.cathychen.ApplicationPortal.domain.Reviewer">
+        <id column="Reviewer_EMAIL" property="ReviewerEmail" jdbcType="CHAR" />
+        <result column="Reviewer_ID" property="ReviewerId" jdbcType="INTEGER" />
+        <result column="Reviewer_NAME" property="ReviewerName" jdbcType="CHAR" />
+        <result column="Reviewer_PASSWORD" property="ReviewerPassword" jdbcType="CHAR" />
+    </resultMap>
+
+    <select id="selectReviewerById" parameterType="int" resultMap="BaseResultMap">
+        SELECT * FROM t_Reviewer WHERE Reviewer_ID = #{ReviewerId}
+    </select>
+
+    <select id="selectReviewerByEmail" parameterType="String" resultMap="EmailResultMap">
+        SELECT * FROM t_Reviewer WHERE Reviewer_EMAIL = #{ReviewerEmail}
+    </select>
+
+    <insert id = "insertReviewer" useGeneratedKeys="true" keyColumn="Reviewer_ID" keyProperty="ReviewerId"
+            parameterType = "com.cathychen.ApplicationPortal.domain.Reviewer">
+        INSERT INTO t_Reviewer (
+        Reviewer_NAME,
+        Reviewer_PASSWORD,
+        Reviewer_EMAIL
+        )
+        VALUES
+        (
+        #{ReviewerName},
+        #{ReviewerPassword},
+        #{ReviewerEmail}
+        );
+    </insert>
+
+
+</mapper> 
