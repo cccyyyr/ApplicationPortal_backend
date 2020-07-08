@@ -7,14 +7,18 @@ import com.cathychen.ApplicationPortal.api.ReviewRequest;
 import com.cathychen.ApplicationPortal.api.SignUpRequest;
 import com.cathychen.ApplicationPortal.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
 @Service
+@RestController
 public class ReviewService {
     @Autowired
     private ReviewBiz rb;
 
-    public Response<String> apply(Application request){
+    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    public Response<String> apply(@RequestBody Application request){
         if(request == null){
             return Responses.fail(0, "Application is null");
         }
@@ -28,7 +32,8 @@ public class ReviewService {
         return Responses.of("Applied Successfully");
     }
 
-    public Response<Boolean> review(ReviewRequest request){
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public Response<Boolean> review(@RequestBody ReviewRequest request){
         if(request == null){
             return Responses.fail(0, "ReviewRequest is null");
         }
@@ -54,8 +59,8 @@ public class ReviewService {
         rb.saveReview(request);
         return Responses.of(request.getDecision());
     }
-
-    public Response<Boolean> LogIn(LoginRequest request){
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Response<Boolean> LogIn(@RequestBody LoginRequest request){
         Boolean logInIsReviewer = rb.loginIsReviewer(request);
         if(logInIsReviewer == null){
             return Responses.fail(0, "User Not Found or Password Not Correct");
@@ -66,11 +71,12 @@ public class ReviewService {
         }
     }
 
-    public Response<Boolean> signUp(SignUpRequest request){
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public Response<Boolean> signUp(@RequestBody SignUpRequest request) {
         if(request.getIsReviewer() == null){
             return Responses.fail(0, "Identity not specified");
         } else {
-            Boolean isReviewer = rb.signUpIsReviewer(request);
+            Boolean isReviewer = rb.signUpAlrAsReviewer(request);
             if(isReviewer == null){
                 return Responses.fail(0, "Email already registered. Please log in.");
             }

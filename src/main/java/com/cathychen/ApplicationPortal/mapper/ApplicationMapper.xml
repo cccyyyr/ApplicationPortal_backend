@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.cathychen.ApplicationPortal.dao.ApplicationDao">
+    <resultMap id="ApplicationResultMap" type="com.cathychen.ApplicationPortal.domain.Application">
+        <id column="Application_ID" property="ApplicationId" jdbcType="INTEGER" />
+        <result column="Application_Detail" property="ApplicationDetail" jdbcType="VARCHAR"/>
+        <result column="Application_Status" property="ApplicationStatus" jdbcType="BOOLEAN"/>
+        <result column="Application_Date" property="ApplicationDate" jdbcType="DATE"/>
+        <result column="ApplicationApplicant_ID" property="ApplicationApplicantID" jdbcType="INTEGER" />
+        <result column="ApplicationPrimaryReviewer_ID"  property="ApplicationPrimaryReviewerID" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="selectApplicationById" parameterType="int" resultMap="ApplicationResultMap">
+        SELECT * FROM Application WHERE Application_ID = #{ApplicationId}
+    </select>
+
+    <select id="selectApplicantById" parameterType="int" resultType = "com.cathychen.ApplicationPortal.domain.Applicant">
+        SELECT * FROM t_Applicant WHERE Applicant_ID = #{ApplicantId}
+    </select>
+
+    <select id="selectReviewerById" parameterType="int" resultType = "com.cathychen.ApplicationPortal.domain.Reviewer">
+        SELECT * FROM t_Reviewer WHERE Reviewer_ID = #{ReviewerId}
+    </select>
+
+    <insert id = "insertApplication" useGeneratedKeys="true" keyColumn="Application_ID" keyProperty="ApplicationId"
+            parameterType = "com.cathychen.ApplicationPortal.domain.Application">
+        INSERT INTO Application (
+        Application_Detail,
+        Application_Status,
+        Application_Date,
+        ApplicationApplicant_ID,
+        ApplicationPrimaryReviewer_ID
+        )
+        VALUES
+        (
+        #{ApplicationDetail},
+        #{ApplicationStatus},
+        #{ApplicationDate},
+        #{ApplicationApplicantID},
+        #{ApplicationPrimaryReviewerID}
+        );
+    </insert>
+
+    <select id = "selectReviewerGroup" parameterType = "Integer" resultType="Integer">
+        SELECT reviewer_id FROM Reviewer2Application where application_id = #{id}
+    </select>
+
+    <insert id = "insertReviewer2Application" parameterType= "java.util.Set">
+        INSERT INTO Reviewer2Application (reviewer_id, application_id) VALUES
+        <foreach collection="list" item="ele" index="index" open="(" separator="),(" close=")">
+        #{ele.reviewerId},#{ele.applicationId}
+        </foreach>
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE Application SET Application_Status = #{a} WHERE Application_ID = #{b}
+    </update>
+
+</mapper> 

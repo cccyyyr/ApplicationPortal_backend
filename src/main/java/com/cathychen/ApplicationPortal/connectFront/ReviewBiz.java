@@ -22,7 +22,7 @@ public class ReviewBiz {
     @Autowired
     private ReviewerService reviewerService;
 
-    public Boolean signUpIsReviewer(SignUpRequest su){
+    public Boolean signUpAlrAsReviewer(SignUpRequest su){
         if(su.getIsReviewer()){
             if(reviewerService.selectReviewerByEmail(su.getEmail()) != null){
                 return null;
@@ -65,9 +65,6 @@ public class ReviewBiz {
 
     public void saveApplication(Application app) {
         int id = app.getApplicationId();
-//        if(applicationService.selectApplicationById(id) != null){
-//           applicationService.updateApplication(app);
-//        }
         applicationService.insertApplication(app);
         List<Reviewer> list = app.getReviewerList();
         List<RAPair> ra = new LinkedList<RAPair>();
